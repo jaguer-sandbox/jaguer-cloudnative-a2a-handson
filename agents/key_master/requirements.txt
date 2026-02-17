@@ -1,0 +1,5 @@
+google-cloud-aiplatform
+google-generativeai
+uvicorn
+fastapi
+google-adk[a2a]
