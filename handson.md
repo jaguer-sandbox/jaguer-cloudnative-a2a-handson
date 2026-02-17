@@ -93,7 +93,7 @@ ADKでは、エージェントのコードは **`{エージェントをまとめ
 次に、以下のコマンドで Cloud Shell をエディタモードにしてください。
 
 ```bash
-cloudshell edit .
+cloudshell ws .
 ```
 
 次に以下のコマンドで Agent のソースコードファイルを作成します
