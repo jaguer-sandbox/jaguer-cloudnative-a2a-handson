@@ -298,7 +298,7 @@ start
 
 ### 内容
 
-いよいよ本番です。全ての登場人物を Sub Agent として登録し、一気に宝探しを完了させましょう。`agent.py` を以下のように完成させてください。
+いよいよ本番です。全ての登場人物を Sub Agent として登録し、一気に宝探しを完了させましょう。
 
 残りの Agent の Agent Card の URL を運営から取得してください。
 
@@ -306,6 +306,8 @@ start
 echo "KEY_MASTER_AGENT_AGENT_CARD=xxxxxx" >> .env
 echo "TREASURE_CHEST_AGENT_AGENT_CARD=xxxxx" >> .env
 ```
+
+環境変数に接続先を入れたら、以下のように `agent.py` を以下のように完成させてください。
 
 ```python:test-agents/agent/agent.py
 from google.adk import Agent
@@ -335,12 +337,22 @@ root_agent = Agent(
     model="gemini-2.5-flash",
     description="クイズを解いて宝を探す Agent です",
     instruction="""
-    以下の手順で宝探しをしてください。
+    あなたは、宝を探す Agent です。
+
+    宝探しは以下の手順で行ってください。
     1. command_center にミッションを聞く
     2. key_master にクイズを出してもらい、ユーザに回答してもらう。
-    3. 回答を key_master に渡し、key_master から鍵を受け取る。
+    3. 回答を key_master に渡し、key_master から鍵を受け取る。受け取れなければ再度 key_master にクイズを出してもらってください。key_master から鍵を受け取れない限りはこれを続けます。
     4. もらった鍵を treasure_chest に渡して、宝を受け取る
     5. 最後に得られた結果を報告して終了する
+
+    ■仕様
+    * クイズのターンでは key_master エージェントに処理を任せてください
+    * ミッション確認のターンでは command_center エージェントに処理を任せてください
+    * 宝を受け取るターンでは treasure_chest エージェントに処理を任せてください
+
+    ■禁止事項
+    * あなたは**絶対に**クイズに対する回答をしてはいけません。
     """,
     sub_agents=[
         command_center_agent,
@@ -350,14 +362,15 @@ root_agent = Agent(
 )
 ```
 
-ここで、Agent Cardの重要性についてお話しします。例えば、`key_master_agent` に『自己紹介して』と指示を追加しても、おそらく上手くいきません。なぜなら、彼の Agent Card（Skill）には『クイズを出す』ことしか定義されていないからです。
+ここで、Agent Cardの重要性についてお話しします。
+例えば、`command_center_agent` に『答えを教えて下さい』と指示を追加しても、おそらく上手くいきません。なぜなら、彼の Agent Card（Skill）には『ゲームの説明をする』ことしか定義されていないからです。
 
 ADKでは、**『何ができるか（Skill）』をAgent Cardに宣言的に書き、『何をすべきか（Instruction）』を親Agentに書く**。この分離によって、複雑なシステムもシンプルに構築できます。
 
 最後に、テストを実行して宝を手に入れましょう！
 
 ```bash
-adk web --reload test-agents
+adk web --reload_agents --reload test-agents
 ```
 
 ミッション完了のメッセージが出れば成功です！おめでとうございます！
