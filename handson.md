@@ -90,20 +90,22 @@ ADKでは、エージェントのコードは **`{エージェントをまとめ
 
 では、まずは一旦、何も考えず、AI Agent を作成してみます。
 
-次に、以下のコマンドで Cloud Shell をエディタモードにしてください。
+以下のコマンドで Agent のソースコードファイルを作成します
 
 ```bash
-cloudshell ws .
-```
-
-次に以下のコマンドで Agent のソースコードファイルを作成します
-
-```bash
-mkdir test-agents/agent/
+mkdir -p test-agents/agent/
 touch test-agents/agent/agent.py
 ```
 
-`test-agents/agent/` に `agent.py` が作成されたと思います。以下のコードを貼り付けてください。
+`test-agents/agent/` に `agent.py` が作成されたと思います。
+
+次に、コードを貼り付けるために以下のコマンドで Cloud Shell をエディタモードにしてください。
+
+```bash
+cloudshell ws . test-agents/agent/agent.py
+```
+
+開かれたら、以下のコードを貼り付けてください。
 
 ```python:test-agents/agent/agent.py
 from google.adk import Agent
